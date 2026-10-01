@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>El Vinero - Simulador de Carrera & Creación Vitivinícola</title>
+  <meta name="description" content="El Vinero: Simulador de carrera vitivinícola, enología de autor y diseño de etiquetas de lujo en Argentina.">
+
+  <!-- FUENTES DE ALTA GAMA EDITORIAL -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       ESTÉTICA: MINIMALISMO DE LUJO EDITORIAL (EL VINERO)
+       ========================================================================== */
+    :root {
+      --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-serif: 'Cormorant Garamond', 'Palatino Linotype', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-script: 'Pinyon Script', cursive;
+      --font-mono: 'Space Grotesk', monospace;
+
+      --bg-body: #08080a;
+      --bg-card: #111115;
+      --bg-card-hover: #17171d;
+      --bg-elevated: #1a1a22;
+
+      --text-main: #f4f4f6;
+      --text-muted: #93939f;
+      --text-dim: #60606d;
+
+      --bordo-primary: #801424;
+      --bordo-hover: #9c192d;
+      --bordo-subtle: rgba(128, 20, 36, 0.18);
+      --bordo-border: rgba(156, 25, 45, 0.35);
+      --bordo-glow: rgba(156, 25, 45, 0.6);
+
+      --gold-primary: #c5a059;
+      --gold-light: #e4ca8f;
+      --gold-subtle: rgba(197, 160, 89, 0.15);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-body); }
+    ::-webkit-scrollbar-thumb { background: #22222a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--bordo-primary); }
+
+    body {
+      background-color: var(--bg-body);
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(128, 20, 36, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(128, 20, 36, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* TIPOGRAFÍA */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    .editorial-serif {
+      font-family: var(--font-serif);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    .tag-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold-light);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #ffffff 0%, #f0e6e8 40%, #c48b94 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: rgba(17, 17, 21, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .nav-winemaker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: var(--bordo-subtle);
+      border: 1px solid var(--bordo-border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e0314b;
+      box-shadow: 0 0 8px #e0314b;
+    }
+
+    .nav-stats {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      font-family: var(--font-mono);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    /* BOTONES */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--bordo-primary);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 16px rgba(128, 20, 36, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--bordo-hover);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 20px var(--bordo-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-hover);
+      color: #fff;
+    }
+
+    .btn-sm { padding: 6px 14px; font-size: 11.5px; }
+    .btn-lg { padding: 14px 28px; font-size: 14px; font-weight: 600; }
+
+    /* CARDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .banner-grid {
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 24px;
+      align-items: center;
+      background: linear-gradient(135deg, #111116 0%, #171114 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+
+    /* STEPPER */
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .step-pill {
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .step-pill.active {
+      border-color: var(--bordo-border);
+      background: var(--bordo-subtle);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .step-pill.completed {
+      border-color: rgba(74, 222, 128, 0.25);
+      color: #86efac;
+    }
+
+    .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+    }
+
+    .step-pill.active .step-num {
+      background: var(--bordo-primary);
+      color: #fff;
+    }
+
+    /* STUDIO DE BOTELLA Y ETIQUETA */
+    .stage-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 32px;
+      align-items: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #0d0d10 0%, #140d10 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+    }
+
+    .bottle-frame {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .bottle-neck {
+      width: 48px;
+      height: 54px;
+      background: linear-gradient(90deg, #151515 0%, #303030 50%, #101010 100%);
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      margin-bottom: -4px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .neck-seal-wax {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 38px;
+      background: radial-gradient(circle at 40% 30%, #a6122a, #4a0510);
+      border-radius: 3px 3px 8px 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: #fce7eb;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .neck-seal-wax::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 14px;
+      width: 8px;
+      height: 8px;
+      background: #4a0510;
+      border-radius: 50%;
+    }
+
+    .neck-seal-tin {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 42px;
+      background: linear-gradient(90deg, #222, #555 50%, #181818);
+      border-radius: 3px 3px 2px 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: #ddd;
+    }
+
+    .neck-seal-beeswax {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 34px;
+      background: radial-gradient(circle at 40% 30%, #c5a059, #6d5120);
+      border-radius: 3px 3px 6px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .wine-label {
+      width: 260px;
+      min-height: 370px;
+      border-radius: 2px;
+      padding: 24px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0,0,0,0.5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .label-badge {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      padding: 4px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .label-wine-name {
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.15;
+      margin: 8px 0 4px 0;
+    }
+
+    .label-signature {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    /* GRID DE OPCIONES */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .option-card {
+      background: #15151b;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .option-card:hover {
+      border-color: var(--border-hover);
+      background: #1c1c24;
+      transform: translateY(-2px);
+    }
+
+    .option-card.selected {
+      border-color: var(--bordo-border);
+      background: var(--bordo-subtle);
+      box-shadow: 0 0 16px rgba(128, 20, 36, 0.25);
+    }
+
+    .option-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .option-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* TROFEOS */
+    .trophy-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .trophy-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .trophy-card.unlocked {
+      border-color: var(--gold-primary);
+      background: var(--gold-subtle);
+    }
+
+    .trophy-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-light);
+      font-family: var(--font-mono);
+    }
+
+    /* MODALES */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      background: #111116;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px; right: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: var(--text-muted);
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .modal-close-btn:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .review-card {
+      background: #16161d;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+
+    .review-card.score-100 {
+      border-color: var(--bordo-border);
+      background: linear-gradient(135deg, rgba(128, 20, 36, 0.25), #16161d);
+    }
+
+    @media (max-width: 820px) {
+      .banner-grid { grid-template-columns: 1fr; }
+      .stage-container { grid-template-columns: 1fr; }
+      .navbar { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .nav-stats { width: 100%; justify-content: space-between; }
+      .stepper { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="app-root"></div>
+  </div>
+
+  <!-- MODAL GLOBAL -->
+  <div id="global-modal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="window.UI.closeModal()">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DATOS REALES: BODEGAS DE ÉLITE DE ARGENTINA, TERROIRS Y VINOS
+       ========================================================================== */
+
+    const BODEGAS_DB = {
+      "finca_escuela": {
+        id: "finca_escuela",
+        name: "Bodega Escuela Tradicional",
+        shortName: "Bodega Tradicional",
+        location: "Maipú & Luján de Cuyo, Mendoza",
+        winemakerLeader: "Tutor Enológico de Cátedra",
+        tier: "Iniciación",
+        description: "Una bodega clásica de piletas históricas donde los graduados dominan los fundamentos del viñedo y las fermentaciones puras.",
+        wines: [
+          {
+            id: "clasico_malbec", name: "Malbec Tradicional de Luján", grape: "Malbec 100%", line: "Crianza Roble Clásico",
+            targetScore: 89, idealVessel: "hormigon", idealHarvest: "optima", idealCluster: 0, idealAging: 8,
+            labelDefaults: { paper: "pergamino", fontStyle: "cormorant", sealStyle: "capsula_estano", finish: "numeracion", foil: "bordo" },
+            labelDesign: { bgColor: "#F8F6F0", textColor: "#222222", accentColor: "#801424", sealText: "LUJÁN DE CUYO", imageBadge: "🍇", vintageText: "MENDOZA ARGENTINA" }
+          },
+          {
+            id: "reserva_cabernet", name: "Cabernet Sauvignon Reserva", grape: "Cabernet Sauvignon 100%", line: "Reserva de Parcela",
+            targetScore: 91, idealVessel: "foudre", idealHarvest: "optima", idealCluster: 10, idealAging: 12,
+            labelDefaults: { paper: "algodon", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "suelo_calcareo", foil: "oro" },
+            labelDesign: { bgColor: "#0F0C0D", textColor: "#F2F4F8", accentColor: "#9C192D", sealText: "RESERVA ROBLE", imageBadge: "🏛️", vintageText: "PRIMERA ZONA" }
+          }
+        ]
+      },
+      "la_estocada": {
+        id: "la_estocada",
+        name: "Sitio La Estocada",
+        shortName: "La Estocada",
+        location: "Gualtallary, Tupungato, Valle de Uco",
+        winemakerLeader: "Matías Michelini & Cecilia Álvarez",
+        tier: "Culto & Biodinámica",
+        description: "Finca familiar agroecológica en Gualtallary, con 9 parcelas de caliza viva y hogar del restaurante Cal (Estrella MICHELIN).",
+        wines: [
+          {
+            id: "camino_europeos", name: "Camino de los Europeos", grape: "Malbec de Parcela", line: "Expresión Pura de Gualtallary",
+            targetScore: 95, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 20, idealAging: 10,
+            labelDefaults: { paper: "algodon", fontStyle: "pinyon", sealStyle: "lacre_bordo", finish: "suelo_calcareo", foil: "bordo" },
+            labelDesign: { bgColor: "#FAF4EE", textColor: "#321116", accentColor: "#801424", sealText: "CAMINO DE LOS EUROPEOS", imageBadge: "🌿", vintageText: "GUALTALLARY BIODINÁMICO" }
+          },
+          {
+            id: "cal_malbec", name: "Cal Malbec de Caliza", grape: "Malbec 100%", line: "Homenaje a Cal (Estrella Michelin)",
+            targetScore: 97, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 25, idealAging: 12,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "michelin", foil: "oro" },
+            labelDesign: { bgColor: "#120B0D", textColor: "#F5ECE5", accentColor: "#9C192D", sealText: "CAL • MICHELIN STAR", imageBadge: "⭐", vintageText: "CALIZA PURA" }
+          },
+          {
+            id: "estocada_gran_corte", name: "Sitio La Estocada Gran Corte", grape: "Malbec - Cabernet Franc Blend", line: "El Gran Icono Biodinámico",
+            targetScore: 99, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 30, idealAging: 16,
+            labelDefaults: { paper: "algodon", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "numeracion", foil: "oro" },
+            labelDesign: { bgColor: "#09090B", textColor: "#FFFFFF", accentColor: "#C5A059", sealText: "SITIO LA ESTOCADA • GRAN CORTE", imageBadge: "👑", vintageText: "GUALTALLARY" }
+          }
+        ]
+      },
+      "cru_montana": {
+        id: "cru_montana",
+        name: "Cru de Montaña",
+        shortName: "Cru de Montaña",
+        location: "San Pablo & Gualtallary, Valle de Uco",
+        winemakerLeader: "Rodrigo Calderón & Matías Michelini",
+        tier: "Viticultura Heroica",
+        description: "Elaboraciones de mínima intervención en laderas andinas a más de 1.450 msnm con tensión y mineralidad filosa.",
+        wines: [
+          {
+            id: "cru_malbec", name: "Cru de Montaña Malbec San Pablo", grape: "Malbec 100%", line: "Malbec de Altura Fría",
+            targetScore: 95, idealVessel: "huevo", idealHarvest: "temprana", idealCluster: 15, idealAging: 10,
+            labelDefaults: { paper: "algodon", fontStyle: "playfair", sealStyle: "cera_abeja", finish: "suelo_calcareo", foil: "bordo" },
+            labelDesign: { bgColor: "#F0F2ED", textColor: "#122018", accentColor: "#801424", sealText: "CRU DE MONTAÑA • MALBEC", imageBadge: "🏔️", vintageText: "SAN PABLO 1450M" }
+          },
+          {
+            id: "cru_chardonnay", name: "Cru de Montaña Chardonnay", grape: "Chardonnay 100%", line: "Blanco de Caliza Andina",
+            targetScore: 97, idealVessel: "huevo", idealHarvest: "temprana", idealCluster: 0, idealAging: 12,
+            labelDefaults: { paper: "pergamino", fontStyle: "cormorant", sealStyle: "cera_abeja", finish: "numeracion", foil: "oro" },
+            labelDesign: { bgColor: "#140D0F", textColor: "#EAECE7", accentColor: "#9C192D", sealText: "CRU DE MONTAÑA • CHARDONNAY", imageBadge: "🌼", vintageText: "GUALTALLARY CALIZA" }
+          },
+          {
+            id: "cru_parcela", name: "Cru de Montaña Parcela Calcáreo", grape: "Malbec - Franc Blend", line: "El Icono de la Cumbre",
+            targetScore: 99, idealVessel: "huevo", idealHarvest: "optima", idealCluster: 30, idealAging: 16,
+            labelDefaults: { paper: "algodon", fontStyle: "pinyon", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#08080A", textColor: "#FFFFFF", accentColor: "#E4CA8F", sealText: "CRU DE MONTAÑA • CALCÁREO", imageBadge: "👑", vintageText: "PARCELA EXTREMA" }
+          }
+        ]
+      },
+      "noemia": {
+        id: "noemia",
+        name: "Bodega Noemía",
+        shortName: "Noemía",
+        location: "Mainqué, Valle del Río Negro, Patagonia",
+        winemakerLeader: "Hans Vinding-Diers & Noemí Marone Cinzano",
+        tier: "Patagonia Legendaria",
+        description: "Viñas de 1932 en pie franco con agricultura biodinámica certificada en el Alto Valle de Río Negro.",
+        wines: [
+          {
+            id: "a_lisa", name: "A Lisa Malbec", grape: "Malbec (90%) - Merlot (10%)", line: "Frescura Patagónica",
+            targetScore: 94, idealVessel: "cemento", idealHarvest: "temprana", idealCluster: 10, idealAging: 8,
+            labelDefaults: { paper: "pergamino", fontStyle: "pinyon", sealStyle: "capsula_estano", finish: "numeracion", foil: "bordo" },
+            labelDesign: { bgColor: "#FAF6EE", textColor: "#1E090D", accentColor: "#801424", sealText: "A LISA • PATAGONIA", imageBadge: "🌿", vintageText: "COSECHA MAINQUÉ" }
+          },
+          {
+            id: "j_alberto", name: "J. Alberto Malbec", grape: "Malbec (95%) - Merlot (5%)", line: "Viñedo Biodinámico 1955",
+            targetScore: 97, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 20, idealAging: 12,
+            labelDefaults: { paper: "algodon", fontStyle: "cormorant", sealStyle: "lacre_bordo", finish: "suelo_calcareo", foil: "oro" },
+            labelDesign: { bgColor: "#F4ECE1", textColor: "#26060C", accentColor: "#9C192D", sealText: "J. ALBERTO • 1955", imageBadge: "📜", vintageText: "VIÑEDO BIODINÁMICO" }
+          },
+          {
+            id: "noemia_1932", name: "Bodega Noemía Malbec 1932", grape: "Malbec Prefiloxérico 100%", line: "Gran Icono Centenario (1932)",
+            targetScore: 99, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 25, idealAging: 18,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#09090B", textColor: "#F7F1E6", accentColor: "#E4CA8F", sealText: "BODEGA NOEMÍA • 1932", imageBadge: "👑", vintageText: "PIE FRANCO CENTENARIO" }
+          }
+        ]
+      },
+      "chacra": {
+        id: "chacra",
+        name: "Bodega Chacra",
+        shortName: "Chacra",
+        location: "Mainqué, Valle del Río Negro, Patagonia",
+        winemakerLeader: "Piero Incisa della Rocchetta (Sassicaia) & Jean-Marc Roulot",
+        tier: "Pinot Noir Mundial",
+        description: "Consagrada con 100 Puntos James Suckling (Vino del Año Mundial con Chacra 32).",
+        wines: [
+          {
+            id: "barda", name: "Barda Pinot Noir", grape: "Pinot Noir 100%", line: "Frescura Patagónica",
+            targetScore: 94, idealVessel: "cemento", idealHarvest: "temprana", idealCluster: 15, idealAging: 10,
+            labelDefaults: { paper: "pergamino", fontStyle: "cormorant", sealStyle: "capsula_estano", finish: "numeracion", foil: "bordo" },
+            labelDesign: { bgColor: "#FAF6F0", textColor: "#300911", accentColor: "#801424", sealText: "BARDA • PINOT NOIR", imageBadge: "🍒", vintageText: "PATAGONIA ARGENTINA" }
+          },
+          {
+            id: "chacra_55", name: "Chacra 55 (Cincuenta y Cinco)", grape: "Pinot Noir 100% (1955)", line: "Viñedo No Injertado 1955",
+            targetScore: 98, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 25, idealAging: 12,
+            labelDefaults: { paper: "algodon", fontStyle: "pinyon", sealStyle: "lacre_bordo", finish: "suelo_calcareo", foil: "oro" },
+            labelDesign: { bgColor: "#F3ECE1", textColor: "#22040B", accentColor: "#9C192D", sealText: "CINCUENTA Y CINCO • 1955", imageBadge: "📜", vintageText: "VIÑAS VIEJAS MAINQUÉ" }
+          },
+          {
+            id: "chacra_32", name: "Chacra 32 Pinot Noir (100 Pts)", grape: "Pinot Noir 100% (1932)", line: "Vino del Año Mundial",
+            targetScore: 100, idealVessel: "cemento", idealHarvest: "optima", idealCluster: 30, idealAging: 18,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#08080A", textColor: "#FFFFFF", accentColor: "#E4CA8F", sealText: "TREINTA Y DOS • 100 PTS", imageBadge: "👑", vintageText: "1932 PREFILOXÉRICO" }
+          }
+        ]
+      },
+      "zuccardi": {
+        id: "zuccardi",
+        name: "Zuccardi Valle de Uco",
+        shortName: "Zuccardi",
+        location: "Paraje Altamira & San Pablo, Valle de Uco",
+        winemakerLeader: "Sebastián Zuccardi",
+        tier: "Mejor Bodega del Mundo",
+        description: "Tres veces elegida Mejor Bodega del Mundo (World's Best Vineyards). Templo de piedra y hormigón crudo.",
+        wines: [
+          {
+            id: "poligonos", name: "Polígonos San Pablo Cabernet Franc", grape: "Cabernet Franc 100%", line: "Altitud Andina 1.400m",
+            targetScore: 95, idealVessel: "hormigon", idealHarvest: "temprana", idealCluster: 20, idealAging: 10,
+            labelDefaults: { paper: "algodon", fontStyle: "inter", sealStyle: "capsula_estano", finish: "suelo_calcareo", foil: "bordo" },
+            labelDesign: { bgColor: "#EBE6DC", textColor: "#101010", accentColor: "#801424", sealText: "POLÍGONOS • SAN PABLO", imageBadge: "📐", vintageText: "1400 METROS" }
+          },
+          {
+            id: "aluvional", name: "Zuccardi Aluvional Gualtallary", grape: "Malbec 100%", line: "Suelo Aluvional Calcáreo",
+            targetScore: 98, idealVessel: "hormigon", idealHarvest: "optima", idealCluster: 25, idealAging: 14,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "suelo_calcareo", foil: "oro" },
+            labelDesign: { bgColor: "#11090B", textColor: "#F5F2EB", accentColor: "#9C192D", sealText: "ALUVIONAL • GUALTALLARY", imageBadge: "🪨", vintageText: "SUELO CALCÁREO" }
+          },
+          {
+            id: "piedra_infinita", name: "Zuccardi Finca Piedra Infinita (100 Pts)", grape: "Malbec Paraje Altamira", line: "El Santo Grial Parker",
+            targetScore: 100, idealVessel: "hormigon", idealHarvest: "optima", idealCluster: 30, idealAging: 16,
+            labelDefaults: { paper: "algodon", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#08080A", textColor: "#FFFFFF", accentColor: "#E4CA8F", sealText: "PIEDRA INFINITA • 100 PTS", imageBadge: "👑", vintageText: "PARAJE ALTAMIRA" }
+          }
+        ]
+      },
+      "el_enemigo": {
+        id: "el_enemigo",
+        name: "El Enemigo (Bodega Aleanna)",
+        shortName: "El Enemigo",
+        location: "Chachingo, Maipú & Gualtallary, Valle de Uco",
+        winemakerLeader: "Alejandro Vigil & Dra. Adrianna Catena",
+        tier: "Culto al Cabernet Franc",
+        description: "Creación de Alejandro Vigil y Adrianna Catena inspirada en la Divina Comedia. Múltiples 100 Puntos Parker.",
+        wines: [
+          {
+            id: "enemigo_malbec", name: "El Enemigo Malbec", grape: "Malbec (85%) - Cabernet Franc (15%)", line: "Corte Rebelde Chachingo",
+            targetScore: 95, idealVessel: "foudre", idealHarvest: "optima", idealCluster: 15, idealAging: 12,
+            labelDefaults: { paper: "pergamino", fontStyle: "playfair", sealStyle: "capsula_estano", finish: "numeracion", foil: "bordo" },
+            labelDesign: { bgColor: "#EBE3D5", textColor: "#14100D", accentColor: "#801424", sealText: "EL ENEMIGO • CHACHINGO", imageBadge: "⚔️", vintageText: "MENDOZA ARGENTINA" }
+          },
+          {
+            id: "enemigo_chardonnay", name: "El Enemigo Chardonnay (Velo de Flor)", grape: "Chardonnay 100%", line: "Crianza Biológica Jura",
+            targetScore: 97, idealVessel: "foudre", idealHarvest: "temprana", idealCluster: 0, idealAging: 14,
+            labelDefaults: { paper: "algodon", fontStyle: "cormorant", sealStyle: "cera_abeja", finish: "numeracion", foil: "oro" },
+            labelDesign: { bgColor: "#F7F3E9", textColor: "#1A130F", accentColor: "#9C192D", sealText: "EL ENEMIGO • CHARDONNAY", imageBadge: "🌼", vintageText: "VELO DE FLOR" }
+          },
+          {
+            id: "gran_enemigo", name: "Gran Enemigo Gualtallary Single Vineyard (100 Pts)", grape: "Cabernet Franc 85% - Malbec 15%", line: "100 Puntos Parker",
+            targetScore: 100, idealVessel: "foudre", idealHarvest: "optima", idealCluster: 30, idealAging: 18,
+            labelDefaults: { paper: "negro_mate", fontStyle: "pinyon", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#09090B", textColor: "#FFFFFF", accentColor: "#C5A059", sealText: "GRAN ENEMIGO • 100 PTS", imageBadge: "👑", vintageText: "GUALTALLARY" }
+          }
+        ]
+      },
+      "perse": {
+        id: "perse",
+        name: "PerSe",
+        shortName: "PerSe",
+        location: "Gualtallary Monasterio, Valle de Uco (1.450 msnm)",
+        winemakerLeader: "David Bonomi & Edgardo 'Edy' Del Pópolo",
+        tier: "Micro-Terruño Extremo",
+        description: "El proyecto de culto más codiciado de Argentina. Micro-vinificaciones que alcanzaron los 100 puntos Parker con La Craie.",
+        wines: [
+          {
+            id: "perse_inseparable", name: "PerSe Inseparable", grape: "Malbec 100%", line: "Micro-Parcela Gualtallary",
+            targetScore: 95, idealVessel: "huevo", idealHarvest: "temprana", idealCluster: 20, idealAging: 12,
+            labelDefaults: { paper: "algodon", fontStyle: "cormorant", sealStyle: "cera_abeja", finish: "suelo_calcareo", foil: "bordo" },
+            labelDesign: { bgColor: "#FFFFFF", textColor: "#080E14", accentColor: "#801424", sealText: "PERSE • INSEPARABLE", imageBadge: "✨", vintageText: "GUALTALLARY" }
+          },
+          {
+            id: "perse_jubileus", name: "PerSe Jubileus", grape: "Malbec - Cabernet Franc", line: "Ladera Monasterio 1.450m",
+            targetScore: 98, idealVessel: "huevo", idealHarvest: "optima", idealCluster: 25, idealAging: 14,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "numeracion", foil: "oro" },
+            labelDesign: { bgColor: "#0B0709", textColor: "#FFFFFF", accentColor: "#9C192D", sealText: "PERSE • JUBILEUS", imageBadge: "🏔️", vintageText: "1450 METROS" }
+          },
+          {
+            id: "perse_la_craie", name: "PerSe La Craie (100 Pts Parker)", grape: "Malbec - Cabernet Franc", line: "Cumbre Mineral Andina",
+            targetScore: 100, idealVessel: "huevo", idealHarvest: "optima", idealCluster: 30, idealAging: 16,
+            labelDefaults: { paper: "algodon", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#FBFBFC", textColor: "#060606", accentColor: "#C5A059", sealText: "LA CRAIE • 100 PTS PARKER", imageBadge: "💎", vintageText: "MONASTERIO" }
+          }
+        ]
+      },
+      "catena_zapata": {
+        id: "catena_zapata",
+        name: "Catena Zapata",
+        shortName: "Catena Zapata",
+        location: "Agrelo & Adrianna Vineyard (Gualtallary)",
+        winemakerLeader: "Dra. Laura Catena, Nicolás Catena & Alejandro Vigil",
+        tier: "Pioneros & Grand Crus",
+        description: "La bodega que colocó a Argentina en la cima mundial. Su viñedo Adrianna es considerado el Grand Cru de Sudamérica.",
+        wines: [
+          {
+            id: "catena_alta", name: "Catena Alta Malbec", grape: "Malbec de Altura", line: "Corte de Viñedos Históricos",
+            targetScore: 95, idealVessel: "hormigon", idealHarvest: "optima", idealCluster: 15, idealAging: 12,
+            labelDefaults: { paper: "pergamino", fontStyle: "cormorant", sealStyle: "capsula_estano", finish: "numeracion", foil: "bordo" },
+            labelDesign: { bgColor: "#FAF7F0", textColor: "#050F1D", accentColor: "#801424", sealText: "CATENA ALTA • MALBEC", imageBadge: "🏛️", vintageText: "MENDOZA ARGENTINA" }
+          },
+          {
+            id: "nicolas_catena", name: "Nicolás Catena Zapata", grape: "Cabernet Sauvignon - Malbec", line: "El Gran Icono de la Revolución",
+            targetScore: 98, idealVessel: "foudre", idealHarvest: "optima", idealCluster: 20, idealAging: 16,
+            labelDefaults: { paper: "negro_mate", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#0B0709", textColor: "#F8F6F0", accentColor: "#9C192D", sealText: "NICOLÁS CATENA ZAPATA", imageBadge: "👑", vintageText: "GRAND VIN" }
+          },
+          {
+            id: "adrianna_river_stones", name: "Adrianna Vineyard River Stones (100 Pts)", grape: "Malbec de Grava Blanca", line: "El Grand Cru de Sudamérica",
+            targetScore: 100, idealVessel: "hormigon", idealHarvest: "optima", idealCluster: 30, idealAging: 18,
+            labelDefaults: { paper: "algodon", fontStyle: "pinyon", sealStyle: "lacre_bordo", finish: "seleccion_enologo", foil: "oro" },
+            labelDesign: { bgColor: "#09090B", textColor: "#FFFFFF", accentColor: "#E5B95F", sealText: "ADRIANNA RIVER STONES • 100 PTS", imageBadge: "💎", vintageText: "GUALTALLARY 1450M" }
+          }
+        ]
+      }
+    };
+
+    /* VINOTECAS DE CULTO PARA DISTRIBUCIÓN */
+    const VINOTECAS_DB = [
+      {
+        id: "cava_central", name: "Cava Central", location: "Buenos Aires, Argentina",
+        owner: "Curadores & Sommeliers de Cava Central",
+        quote: "Buscamos vinos de micro-parcelas con emoción, tensión calcárea y mínima intervención.",
+        prestigeBoost: 12, salesMult: 1.25
+      },
+      {
+        id: "anchoita_cava", name: "Anchoita Cava", location: "Palermo, Buenos Aires",
+        owner: "Enrique Piñeyro & Valeria Mortara (Head Sommelier)",
+        quote: "Solo las botellas más puras, auténticas y vivas de Argentina ingresan a nuestra cava.",
+        prestigeBoost: 16, salesMult: 1.45
+      },
+      {
+        id: "aldos", name: "Aldo's Vinoteca & Vinatería", location: "San Telmo & Palermo",
+        owner: "Aldo Graziani (Master Sommelier)",
+        quote: "El vino debe representar fielmente a su pueblo, su suelo y a sus productores.",
+        prestigeBoost: 10, salesMult: 1.20
+      },
+      {
+        id: "hedonism_london", name: "Hedonism Wines", location: "Mayfair, Londres, Reino Unido",
+        owner: "Alistair Viner (Head Buyer)",
+        quote: "Colocamos las mejores etiquetas del hemisferio sur junto a Romanée-Conti y Petrus.",
+        prestigeBoost: 25, salesMult: 2.10
+      },
+      {
+        id: "chambers_st_ny", name: "Chambers Street Wines", location: "Tribeca, Manhattan, Nueva York",
+        owner: "David Lillie & Jamie Wolff",
+        quote: "La viticultura viva y los suelos calcáreos son el futuro del vino en los restaurantes de Nueva York.",
+        prestigeBoost: 20, salesMult: 1.80
+      }
+    ];
+
+    /* INCIDENTES Y RIESGOS EN CAVA Y MERCADO */
+    const CELLAR_HAZARDS = [
+      {
+        id: "etiqueta_polemica", title: "¡MERCADO: La etiqueta causó controversia en la preventa!", icon: "🎨",
+        description: "El diseño de autor dividió a los críticos y coleccionistas. Algunos lo consideran una obra de arte moderna, pero los compradores tradicionales dudan de adquirir la partida.",
+        options: [
+          { text: "DEFENDER EL CONCEPTO: Lanzar comunicado de autor y mantener la estética pura.", riskLevel: "Alto (50% Éxito)", rollChance: 0.50,
+            success: { scoreBonus: +3, cost: +2500, msg: "¡Golpe maestro! La audacia visual se volvió viral en Londres y Nueva York. La partida se agotó a precio récord." },
+            failure: { scoreBonus: -3, cost: -3000, msg: "A los clientes clásicos no les gustó la etiqueta. Tuviste que ofrecer un 20% de descuento comercial." } },
+          { text: "SOLUCIÓN CONSERVADORA: Modificar la tirada con faja clásica de bodega.", riskLevel: "Seguro (100%)", rollChance: 1.0,
+            success: { scoreBonus: 0, cost: -800, msg: "Evitaste el rechazo comercial con una faja sobria, asumiendo un costo de imprenta extra." } }
+        ]
+      },
+      {
+        id: "lacre_quebrado", title: "¡LOGÍSTICA: El lacre artesanal se quebró en el transporte!", icon: "📦",
+        description: "Las bajas temperaturas en la bodega del avión de carga a Londres agrietaron el 25% de los sellos de lacre de cera.",
+        options: [
+          { text: "OPCIÓN ARRIESGADA: Venderlas como 'Lote de Cava Imperfecto de Autor' a coleccionistas.", riskLevel: "Medio (60% Éxito)", rollChance: 0.60,
+            success: { scoreBonus: +2, cost: +1200, msg: "Hedonism Wines lo vendió como una edición 'Wabi-Sabi' ultra exclusiva con sobreprecio." },
+            failure: { scoreBonus: -2, cost: -1800, msg: "Varios restaurantes devolvieron cajas exigiendo botellas impecables." } },
+          { text: "OPCIÓN SEGURA: Retirar el lacre dañado y colocar cápsula de estaño de urgencia.", riskLevel: "Seguro (100%)", rollChance: 1.0,
+            success: { scoreBonus: 0, cost: -1000, msg: "Presentación salvada con un costo de reacondicionamiento." } }
+        ]
+      },
+      {
+        id: "vasijas_rotas", title: "¡ALERTA: Se rajaron 2 vasijas de hormigón crudo!", icon: "💥",
+        description: "La presión de fermentación y un micro-sismo andino rajaron 2 piletas de hormigón crudo. El mosto de la mejor parcela está goteando.",
+        options: [
+          { text: "OPCIÓN ARRIESGADA: Trasvasar de urgencia a barricas viejas de roble francés sin tostar.", riskLevel: "Medio (65% Éxito)", rollChance: 0.65,
+            success: { scoreBonus: +3, cost: 0, msg: "¡Maniobra magistral! El roble viejo aportó una textura sedosa sin tapar la fruta pura." },
+            failure: { scoreBonus: -4, cost: -1500, msg: "El traspaso apresurado causó ligera oxidación que Luis Gutiérrez notó en cata." } },
+          { text: "OPCIÓN CONSERVADORA: Descartar el mosto dañado y salvar solo lo que entra en los huevos restantes.", riskLevel: "Seguro (100%)", rollChance: 1.0,
+            success: { scoreBonus: 0, cost: -2500, msg: "Mantuviste el estilo 100% puro en hormigón, aunque se perdió un 30% del volumen." } }
+        ]
+      },
+      {
+        id: "parada_fermentacion", title: "¡PELIGRO: Parada de Fermentación por Levaduras Indígenas!", icon: "🧫",
+        description: "Las levaduras salvajes del viñedo se aletargaron por una noche glacial de 2°C. Hay 14g de azúcar residual sin fermentar.",
+        options: [
+          { text: "OPCIÓN ARRIESGADA: Calentar suavemente la pileta con mantas térmicas y confiar en la flora nativa.", riskLevel: "Alto (50% Éxito)", rollChance: 0.50,
+            success: { scoreBonus: +5, cost: 0, msg: "¡Milagro biológico! Las levaduras despertaron y generaron notas a tomillo y tiza sublimes. Candidato a 100 puntos." },
+            failure: { scoreBonus: -5, cost: 0, msg: "Proliferaron bacterias acéticas y el vino ganó acidez volátil." } },
+          { text: "OPCIÓN SEGURA: Inocular levaduras seleccionadas de laboratorio para terminar el trabajo.", riskLevel: "Seguro (100%)", rollChance: 1.0,
+            success: { scoreBonus: -1, cost: -500, msg: "Fermentación completada de forma limpia y controlada." } }
+        ]
+      },
+      {
+        id: "granizo_inminente", title: "¡TORMENTA: Granizo inminente sobre el cono aluvial!", icon: "🌩️",
+        description: "El radar meteorológico anuncia tormenta. La uva aún necesita 3 días de sol para la madurez polifenólica perfecta.",
+        options: [
+          { text: "OPCIÓN ARRIESGADA: Aguantar la uva en la parra rezando para que el granizo pase de largo.", riskLevel: "Muy Alto (45% Éxito)", rollChance: 0.45,
+            success: { scoreBonus: +6, cost: 0, msg: "¡La tormenta esquivó el viñedo! Los días de sol extra dieron taninos de cachemira irrepetibles." },
+            failure: { scoreBonus: -5, cost: -3500, msg: "El granizo golpeó el 40% de los racimos. Tuviste que hacer una selección drástica." } },
+          { text: "OPCIÓN CONSERVADORA: Cosecha nocturna relámpago con linternas ya mismo.", riskLevel: "Seguro (100%)", rollChance: 1.0,
+            success: { scoreBonus: +2, cost: -1000, msg: "Salvaste el 100% de la uva sana con una acidez filosa y eléctrica." } }
+        ]
+      }
+    ];
+
+    /* CRÍTICOS INTERNACIONALES */
+    const CRITICS_DB = [
+      { id: "parker", name: "Luis Gutiérrez (The Wine Advocate / Robert Parker)", avatar: "🍷", gen: (s, w) => s >= 99 ? `¡100 PUNTOS PARKER! Perfección absoluta en ${w.name}. Tensión de tiza, salinidad y textura mineral irrepetible.` : `Excelente (${s} pts). Gran frescura, fruta intacta y autenticidad de terruño.` },
+      { id: "tim_atkin", name: "Tim Atkin MW (Argentina Special Report)", avatar: "👑", gen: (s, w) => s >= 98 ? `VINO DEL AÑO (${s} pts). Precisión de bisturí, notas herbales y una elegancia que honra la viticultura argentina.` : `Gran exponente (${s} pts). Armonioso, fresco y de gran bebilidad.` },
+      { id: "suckling", name: "James Suckling", avatar: "⭐", gen: (s, w) => s >= 99 ? `¡100 PUNTOS! Monumento sensorial con taninos de cachemira y un final que dura minutos en boca.` : `Soberbio (${s} pts). Enorme energía, sedosidad y concentración noble.` },
+      { id: "descorchados", name: "Patricio Tapia (Guía Descorchados)", avatar: "🧉", gen: (s, w) => s >= 97 ? `¡MEJOR VINO REVELACIÓN (${s} pts)! Pura electricidad andina y sentido de lugar sin maquillaje.` : `Muy buen vino (${s} pts). Directo, fresco y con tipicidad de origen.` }
+    ];
+
+    /* AUDIO ENGINE */
+    class SoundEngine {
+      constructor() { this.ctx = null; this.enabled = true; }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+      }
+      playClick() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.frequency.setValueAtTime(580, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(240, this.ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.04);
+      }
+      playCorkPop() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.frequency.setValueAtTime(130, t);
+        osc.frequency.exponentialRampToValueAtTime(400, t + 0.03);
+        osc.frequency.exponentialRampToValueAtTime(70, t + 0.11);
+        gain.gain.setValueAtTime(0.18, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(t); osc.stop(t + 0.12);
+      }
+      playFanfare() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(f, t + (idx * 0.12));
+          gain.gain.setValueAtTime(0.12, t + (idx * 0.12));
+          gain.gain.exponentialRampToValueAtTime(0.001, t + (idx * 0.12) + 0.35);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(t + (idx * 0.12)); osc.stop(t + (idx * 0.12) + 0.38);
+        });
+      }
+    }
+    const Sound = new SoundEngine();
+
+    /* ==========================================================================
+       MOTOR DE CARRERA - EL VINERO
+       ========================================================================== */
+    class CareerEngine {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.player = {
+          name: "Valentín Altamira",
+          age: 23,
+          startYear: 2024,
+          currentYear: 2024,
+          maxRetirementAge: 65,
+          wealth: 15000,
+          reputation: 20,
+          currentBodegaId: "finca_escuela",
+          role: "Enólogo Asistente",
+          bodegaHistory: [
+            { bodegaId: "finca_escuela", name: "Bodega Escuela Tradicional", startYear: 2024, endYear: null, role: "Enólogo Asistente" }
+          ],
+          winesHistory: [],
+          contracts: [],
+          trophies: {
+            parker100: 0,
+            timAtkinWinemaker: 0,
+            suckling100: 0,
+            descorchadosBest: 0
+          }
+        };
+        this.currentVintage = {
+          wineIndex: 0,
+          targetWine: null,
+          hazard: null,
+          hazardResult: null,
+          missionStep: 1,
+          decisions: {
+            canopyWork: "deshoje_moderado",
+            harvestMethod: "cajas_12kg_noche",
+            harvestTiming: "optima",
+            wholeCluster: 20,
+            vessel: "hormigon",
+            yeast: "indigenas",
+            extractionMethod: "pigeage_manual",
+            oakType: "roble_frances_usado",
+            oakMonths: 12,
+            filtering: "sin_filtrar",
+            labelPaper: "algodon",
+            labelFont: "playfair",
+            labelSeal: "lacre_bordo",
+            labelFinish: "numeracion",
+            labelFoil: "oro"
+          }
+        };
+        this.setupCurrentWine();
+      }
+
+      get currentBodega() {
+        return BODEGAS_DB[this.player.currentBodegaId] || BODEGAS_DB["finca_escuela"];
+      }
+
+      setupCurrentWine() {
+        const b = this.currentBodega;
+        const wine = b.wines[this.currentVintage.wineIndex % b.wines.length];
+        this.currentVintage.targetWine = wine;
+        this.currentVintage.hazard = null;
+        this.currentVintage.hazardResult = null;
+        this.currentVintage.missionStep = 1;
+        const def = wine.labelDefaults || { paper: "algodon", fontStyle: "playfair", sealStyle: "lacre_bordo", finish: "numeracion", foil: "oro" };
+        this.currentVintage.decisions = {
+          canopyWork: "deshoje_moderado",
+          harvestMethod: "cajas_12kg_noche",
+          harvestTiming: wine.idealHarvest,
+          wholeCluster: wine.idealCluster,
+          vessel: wine.idealVessel,
+          yeast: "indigenas",
+          extractionMethod: "pigeage_manual",
+          oakType: "roble_frances_usado",
+          oakMonths: wine.idealAging,
+          filtering: "sin_filtrar",
+          labelPaper: def.paper,
+          labelFont: def.fontStyle,
+          labelSeal: def.sealStyle,
+          labelFinish: def.finish,
+          labelFoil: def.foil || "oro"
+        };
+        return wine;
+      }
+
+      triggerHazard() {
+        const idx = Math.floor(Math.random() * CELLAR_HAZARDS.length);
+        this.currentVintage.hazard = CELLAR_HAZARDS[idx];
+        return this.currentVintage.hazard;
+      }
+
+      resolveHazard(optIdx) {
+        const hazard = this.currentVintage.hazard;
+        const opt = hazard.options[optIdx];
+        const isSuccess = Math.random() <= opt.rollChance;
+        const outcome = isSuccess ? opt.success : (opt.failure || opt.success);
+        if (outcome.cost) this.player.wealth += outcome.cost;
+        this.currentVintage.hazardResult = { isSuccess, scoreBonus: outcome.scoreBonus || 0, narrative: outcome.msg };
+        return { isSuccess, narrative: outcome.msg };
+      }
+
+      evaluateWine() {
+        const target = this.currentVintage.targetWine;
+        const dec = this.currentVintage.decisions;
+        const haz = this.currentVintage.hazardResult;
+        let score = target.targetScore;
+
+        if (dec.harvestTiming === target.idealHarvest) score += 2;
+        if (dec.vessel === target.idealVessel) score += 2;
+        if (Math.abs(dec.wholeCluster - target.idealCluster) <= 10) score += 1;
+        if (dec.harvestMethod === "cajas_12kg_noche") score += 1;
+        if (dec.yeast === "indigenas") score += 1;
+        if (dec.filtering === "sin_filtrar") score += 1;
+        if (dec.labelPaper === "algodon" || dec.labelPaper === "negro_mate") score += 1;
+        if (haz) score += haz.scoreBonus;
+
+        score += Math.floor(Math.random() * 3) - 1;
+        score = Math.min(100, Math.max(86, score));
+
+        const basePrice = Math.round(Math.pow(1.16, Math.max(0, score - 85)) * 28);
+
+        const wineObj = {
+          name: target.name,
+          grape: target.grape,
+          year: this.player.currentYear,
+          bodegaName: this.currentBodega.name,
+          bodegaId: this.currentBodega.id,
+          labelDesign: target.labelDesign,
+          labelCustom: {
+            paper: dec.labelPaper,
+            font: dec.labelFont,
+            seal: dec.labelSeal,
+            finish: dec.labelFinish,
+            foil: dec.labelFoil
+          },
+          winemakerName: this.player.name,
+          score: score,
+          price: basePrice,
+          earnings: Math.round(18000 + (score * 260)),
+          newTrophies: [],
+          reviews: []
+        };
+
+        CRITICS_DB.forEach(c => {
+          let s = score + (Math.floor(Math.random() * 3) - 1);
+          s = Math.min(100, Math.max(86, s));
+          wineObj.reviews.push({ name: c.name, avatar: c.avatar, score: s, note: c.gen(s, wineObj) });
+        });
+
+        if (score === 100) {
+          this.player.trophies.parker100++;
+          wineObj.newTrophies.push("100 PUNTOS ROBERT PARKER (The Wine Advocate)");
+          if (Math.random() < 0.6) {
+            this.player.trophies.suckling100++;
+            wineObj.newTrophies.push("100 PUNTOS JAMES SUCKLING");
+          }
+        }
+        if (score >= 98 && Math.random() < 0.45) {
+          this.player.trophies.timAtkinWinemaker++;
+          wineObj.newTrophies.push("TIM ATKIN MW • ENÓLOGO DEL AÑO");
+        }
+        if (score >= 96 && Math.random() < 0.4) {
+          this.player.trophies.descorchadosBest++;
+          wineObj.newTrophies.push("DESCORCHADOS • MEJOR TINTO");
+        }
+
+        this.player.wealth += wineObj.earnings;
+        this.player.reputation = Math.min(100, this.player.reputation + Math.round((score - 88) * 1.5));
+
+        this.player.winesHistory.unshift(wineObj);
+        return wineObj;
+      }
+
+      applyCommercial(vinotecaId) {
+        const v = VINOTECAS_DB.find(item => item.id === vinotecaId);
+        if (!v) return null;
+        this.player.reputation = Math.min(100, this.player.reputation + v.prestigeBoost);
+        const extraRevenue = Math.round(16000 * v.salesMult);
+        this.player.wealth += extraRevenue;
+        this.player.contracts.push(v.name);
+        return { vinoteca: v, extraRevenue };
+      }
+
+      advanceYear() {
+        this.player.currentYear++;
+        this.player.age++;
+        this.currentVintage.wineIndex++;
+
+        if (this.player.age >= this.player.maxRetirementAge) {
+          return { status: "retired" };
+        }
+
+        const rep = this.player.reputation;
+        const currentId = this.player.currentBodegaId;
+        let recruitmentOffer = null;
+
+        if (rep >= 85 && currentId !== "catena_zapata" && currentId !== "perse") {
+          recruitmentOffer = Math.random() < 0.5 ? BODEGAS_DB["catena_zapata"] : BODEGAS_DB["perse"];
+        } else if (rep >= 70 && (currentId === "finca_escuela" || currentId === "la_estocada" || currentId === "cru_montana")) {
+          recruitmentOffer = Math.random() < 0.5 ? BODEGAS_DB["zuccardi"] : BODEGAS_DB["el_enemigo"];
+        } else if (rep >= 55 && (currentId === "finca_escuela" || currentId === "cru_montana")) {
+          recruitmentOffer = Math.random() < 0.5 ? BODEGAS_DB["chacra"] : BODEGAS_DB["noemia"];
+        } else if (rep >= 35 && currentId === "finca_escuela") {
+          recruitmentOffer = Math.random() < 0.5 ? BODEGAS_DB["la_estocada"] : BODEGAS_DB["cru_montana"];
+        }
+
+        if (recruitmentOffer && recruitmentOffer.id !== currentId) {
+          return { status: "offer", recruitedBodega: recruitmentOffer };
+        }
+
+        this.setupCurrentWine();
+        return { status: "continue", nextWine: this.currentVintage.targetWine };
+      }
+
+      acceptRecruitment(newBodegaId) {
+        const lastHist = this.player.bodegaHistory[this.player.bodegaHistory.length - 1];
+        if (lastHist) lastHist.endYear = this.player.currentYear;
+
+        const newBodega = BODEGAS_DB[newBodegaId];
+        const newRole = this.player.reputation >= 80 ? "Director Enológico Principal" : (this.player.reputation >= 50 ? "Head Winemaker" : "Primer Enólogo");
+        this.player.currentBodegaId = newBodegaId;
+        this.player.role = newRole;
+        this.player.bodegaHistory.push({
+          bodegaId: newBodegaId, name: newBodega.name, startYear: this.player.currentYear, endYear: null, role: newRole
+        });
+        this.currentVintage.wineIndex = 0;
+        this.setupCurrentWine();
+      }
+    }
+
+    const Engine = new CareerEngine();
+
+    /* ==========================================================================
+       VISTAS & UI - EL VINERO
+       ========================================================================== */
+    class UIController {
+      constructor() {
+        this.root = document.getElementById("app-root");
+      }
+
+      renderStart() {
+        this.root.innerHTML = `
+          <div style="text-align: center; max-width: 680px; margin: 50px auto;">
+            <div class="tag-label" style="margin-bottom: 10px;">
+              Simulador de Vida & Creación Vitivinícola
+            </div>
+            <h1 class="brand-title" style="font-size: 52px; margin-bottom: 16px;">
+              El Vinero
+            </h1>
+            <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 32px; line-height: 1.7;">
+              Inicias tu carrera enológica a los 23 años. Controla cada fase de elaboración —viñedo, vendimia, fermentación, crianza y diseño exclusivo de etiqueta con tu nombre— hasta alcanzar el reconocimiento mundial.
+            </p>
+
+            <div class="card" style="text-align: left; max-width: 460px; margin: 0 auto;">
+              <label class="tag-label" style="display: block; margin-bottom: 8px;">
+                Nombre del Enólogo:
+              </label>
+              <input type="text" id="winemaker-input" value="Valentín Altamira" style="width: 100%; padding: 12px 14px; background: #08080a; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff; font-size: 14px; margin-bottom: 16px; font-family: var(--font-sans); outline: none;">
+
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+                📍 <strong>Debut:</strong> Enólogo Asistente en <em>Bodega Escuela Tradicional</em> (Mendoza). Bodegas como Zuccardi, PerSe, Noemía, Chacra, El Enemigo y Catena Zapata seguirán tu evolución.
+              </div>
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.startCareer()" style="width: 100%;">
+                Comenzar Carrera (Añada 2024) ➔
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      startCareer() {
+        Sound.playCorkPop();
+        const input = document.getElementById("winemaker-input");
+        if (input && input.value.trim()) {
+          Engine.player.name = input.value.trim();
+        }
+        Engine.reset();
+        this.renderHub();
+      }
+
+      getLabelStyle(dec, baseLabel) {
+        let bg = baseLabel.bgColor;
+        let txt = baseLabel.textColor;
+        let border = baseLabel.accentColor;
+        let fontFam = "var(--font-display)";
+
+        if (dec.labelPaper === "negro_mate") {
+          bg = "#0c0b0d";
+          txt = "#F4ECE5";
+          border = "#9C192D";
+        } else if (dec.labelPaper === "algodon") {
+          bg = "#FAF7F2";
+          txt = "#15060A";
+          border = "#801424";
+        } else if (dec.labelPaper === "pergamino") {
+          bg = "#F3EAD8";
+          txt = "#22130C";
+          border = "#C5A059";
+        }
+
+        if (dec.labelFont === "pinyon") fontFam = "var(--font-script)";
+        else if (dec.labelFont === "cormorant") fontFam = "var(--font-serif)";
+        else if (dec.labelFont === "inter") fontFam = "var(--font-sans)";
+        else fontFam = "var(--font-display)";
+
+        if (dec.labelFoil === "oro") border = "var(--gold-primary)";
+        else if (dec.labelFoil === "bordo") border = "var(--bordo-primary)";
+
+        return { bg, txt, border, fontFam };
+      }
+
+      renderHub() {
+        const player = Engine.player;
+        const b = Engine.currentBodega;
+        const wine = Engine.currentVintage.targetWine;
+        const step = Engine.currentVintage.missionStep;
+        const dec = Engine.currentVintage.decisions;
+        const style = this.getLabelStyle(dec, wine.labelDesign);
+
+        this.root.innerHTML = `
+          <nav class="navbar">
+            <div class="nav-brand">
+              <span class="nav-logo brand-title">El Vinero</span>
+              <div class="nav-winemaker">
+                <span class="status-dot"></span>
+                <span style="color: #fff; font-weight: 600;">${player.name}</span>
+                <span style="color: var(--text-muted); font-size: 11px;">| ${player.role}</span>
+              </div>
+            </div>
+            <div class="nav-stats">
+              <div class="stat-item">
+                <span class="stat-value">${player.age} años</span>
+                <span class="stat-label">Añada ${player.currentYear}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">$${player.wealth.toLocaleString()} USD</span>
+                <span class="stat-label">Capital</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">${player.reputation}/100</span>
+                <span class="stat-label">Prestigio</span>
+              </div>
+            </div>
+          </nav>
+
+          <div class="banner-grid">
+            <div>
+              <div class="tag-label" style="margin-bottom: 4px;">
+                Bodega Actual • ${player.role}
+              </div>
+              <h2 style="font-size: 28px; margin-bottom: 4px;">
+                ${b.name}
+              </h2>
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+                📍 ${b.location} | Dirección Técnica: ${b.winemakerLeader}
+              </div>
+              <p style="font-size: 13px; color: #b8b8c2; line-height: 1.5;">
+                ${b.description}
+              </p>
+            </div>
+
+            <div style="background: rgba(8, 8, 10, 0.85); border: 1px solid var(--border-subtle); padding: 18px 20px; border-radius: var(--radius-sm);">
+              <div class="tag-label" style="margin-bottom: 4px;">
+                Añada en Marcha (${player.currentYear}):
+              </div>
+              <div style="font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 2px; font-family: var(--font-display);">${wine.name}</div>
+              <div style="font-size: 11.5px; color: var(--text-muted);">${wine.line} | Objetivo: ${wine.targetScore}+ pts</div>
+            </div>
+          </div>
+
+          <!-- PASOS DE ELABORACIÓN -->
+          <div class="stepper">
+            <div class="step-pill ${step === 1 ? 'active' : (step > 1 ? 'completed' : '')}">
+              <span class="step-num">1</span>
+              <span>Viñedo</span>
+            </div>
+            <div class="step-pill ${step === 2 ? 'active' : (step > 2 ? 'completed' : '')}">
+              <span class="step-num">2</span>
+              <span>Vendimia</span>
+            </div>
+            <div class="step-pill ${step === 3 ? 'active' : (step > 3 ? 'completed' : '')}">
+              <span class="step-num">3</span>
+              <span>Fermentación</span>
+            </div>
+            <div class="step-pill ${step === 4 ? 'active' : (step > 4 ? 'completed' : '')}">
+              <span class="step-num">4</span>
+              <span>Crianza</span>
+            </div>
+            <div class="step-pill ${step === 5 ? 'active' : (step > 5 ? 'completed' : '')}">
+              <span class="step-num">5</span>
+              <span>Etiqueta</span>
+            </div>
+          </div>
+
+          <div class="stage-container">
+            <div class="bottle-frame">
+              <div class="bottle-neck">
+                ${dec.labelSeal === 'lacre_bordo' ? `<div class="neck-seal-wax">LACRE</div>` : ''}
+                ${dec.labelSeal === 'capsula_estano' ? `<div class="neck-seal-tin">ESTAÑO</div>` : ''}
+                ${dec.labelSeal === 'cera_abeja' ? `<div class="neck-seal-beeswax">CERA</div>` : ''}
+              </div>
+              <div class="wine-label" style="background-color: ${style.bg}; color: ${style.txt}; border: 1.5px solid ${style.border};">
+                <div>
+                  <div style="font-size: 20px; margin-bottom: 2px;">${wine.labelDesign.imageBadge}</div>
+                  <div class="label-badge" style="background: ${style.border}; color: ${style.bg};">
+                    ${wine.labelDesign.sealText}
+                  </div>
+                  <div style="font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;">
+                    ${b.name}
+                  </div>
+                </div>
+                <div>
+                  <div class="label-wine-name" style="font-family: ${style.fontFam}; font-size: ${dec.labelFont === 'pinyon' ? '32px' : '20px'}; color: ${style.txt};">
+                    ${wine.name}
+                  </div>
+                  <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; color: ${style.border}; letter-spacing: 0.12em;">
+                    ${wine.grape}
+                  </div>
+                  <div class="label-signature" style="color: ${style.txt};">
+                    ENÓLOGO: ${player.name}
+                  </div>
+                  <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-top: 2px;">
+                    ${player.currentYear}
+                  </div>
+                </div>
+                <div style="border-top: 1px solid rgba(0,0,0,0.12); padding-top: 6px; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;">
+                  ${dec.labelFinish === 'suelo_calcareo' ? 'SUELO CALCÁREO • PARCELA ÚNICA' : (dec.labelFinish === 'michelin' ? 'SELECCIÓN ESTRELLA MICHELIN' : (dec.labelFinish === 'seleccion_enologo' ? 'GRAN SELECCIÓN DEL ENÓLOGO' : 'BOTELLA NUMERADA A MANO'))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 style="font-size: 28px; margin-bottom: 6px;">${wine.name}</h3>
+              <p style="font-size: 13px; color: #b8b8c2; line-height: 1.5; margin-bottom: 14px;">
+                ${wine.line}. Elaboración y diseño a cargo de <strong>${player.name}</strong>.
+              </p>
+              <div style="font-size: 12px; color: var(--gold-light); background: var(--gold-subtle); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 2px solid var(--gold-primary); margin-bottom: 16px;">
+                💡 <strong>Pauta de Bodega:</strong> Se recomienda vasija <em>${wine.idealVessel}</em> y cosecha <em>${wine.idealHarvest}</em>.
+              </div>
+
+              <!-- VITRINA -->
+              <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+                <div class="tag-label" style="color: var(--text-muted); margin-bottom: 6px;">
+                  Distinciones Acumuladas por ${player.name}:
+                </div>
+                <div class="trophy-row">
+                  <div class="trophy-card ${player.trophies.parker100 > 0 ? 'unlocked' : ''}">
+                    <div style="font-size: 16px;">🍷</div>
+                    <div style="font-size: 9.5px; color: #fff;">100 Pts Parker</div>
+                    <div class="trophy-count">${player.trophies.parker100}</div>
+                  </div>
+                  <div class="trophy-card ${player.trophies.timAtkinWinemaker > 0 ? 'unlocked' : ''}">
+                    <div style="font-size: 16px;">👑</div>
+                    <div style="font-size: 9.5px; color: #fff;">Tim Atkin MW</div>
+                    <div class="trophy-count">${player.trophies.timAtkinWinemaker}</div>
+                  </div>
+                  <div class="trophy-card ${player.trophies.suckling100 > 0 ? 'unlocked' : ''}">
+                    <div style="font-size: 16px;">⭐</div>
+                    <div style="font-size: 9.5px; color: #fff;">100 Suckling</div>
+                    <div class="trophy-count">${player.trophies.suckling100}</div>
+                  </div>
+                  <div class="trophy-card ${player.trophies.descorchadosBest > 0 ? 'unlocked' : ''}">
+                    <div style="font-size: 16px;">🧉</div>
+                    <div style="font-size: 9.5px; color: #fff;">Descorchados</div>
+                    <div class="trophy-count">${player.trophies.descorchadosBest}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          ${this.renderMissionStep()}
+        `;
+      }
+
+      renderMissionStep() {
+        const step = Engine.currentVintage.missionStep;
+        const wine = Engine.currentVintage.targetWine;
+
+        if (step === 1) {
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3>Misión 1: Manejo Agronómico del Viñedo & Canopia</h3>
+                <span class="tag-label">PASO 1 DE 5</span>
+              </div>
+              <div class="options-grid">
+                <div class="option-card selected" onclick="window.UI.selectOpt(this, 'canopyWork', 'deshoje_moderado')">
+                  <div class="option-title">🌿 Deshoje & Raleo Verde</div>
+                  <div class="option-desc">Eliminar racimos sobrantes para concentrar polifenoles y color en la uva restante.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'canopyWork', 'riego_deficitario')">
+                  <div class="option-title">💧 Riego Deficitario en Suelo Calcáreo</div>
+                  <div class="option-desc">Estrés hídrico leve para forzar a la raíz a profundizar en el lecho calcáreo andino.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'canopyWork', 'biodinamica_pura')">
+                  <div class="option-title">🌱 Biodinámica & Ciclos Lunares</div>
+                  <div class="option-desc">Tratamiento agroecológico con preparados 500/501 de cuarzo y manzanilla silvestre.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'canopyWork', 'poda_guyot_tardia')">
+                  <div class="option-title">✂️ Poda Doble Guyot Tardía</div>
+                  <div class="option-desc">Retrasar la brotación de las yemas para eludir las heladas tardías de primavera.</div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-lg" onclick="window.UI.nextStep()" style="width: 100%; margin-top: 18px;">
+                Siguiente: Vendimia & Cosecha ➔
+              </button>
+            </div>
+          `;
+        } else if (step === 2) {
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3>Misión 2: Fecha de Vendimia & Método de Selección</h3>
+                <span class="tag-label">PASO 2 DE 5</span>
+              </div>
+              <div class="options-grid" style="margin-bottom: 14px;">
+                <div class="option-card ${wine.idealHarvest === 'temprana' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'harvestTiming', 'temprana')">
+                  <div class="option-title">✂️ Cosecha Temprana Eléctrica (Febrero)</div>
+                  <div class="option-desc">Acidez málica alta, gran tensión mineral y alcohol moderado (12.8° - 13.2°).</div>
+                </div>
+                <div class="option-card ${wine.idealHarvest === 'optima' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'harvestTiming', 'optima')">
+                  <div class="option-title">⚖️ Madurez Polifenólica Óptima (Marzo)</div>
+                  <div class="option-desc">Equilibrio clásico de taninos sedosos, fruta negra profunda y gran persistencia.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'harvestTiming', 'tardia')">
+                  <div class="option-title">🍇 Cosecha Tardía Concentrada</div>
+                  <div class="option-desc">Máxima madurez, taninos dulces y perfil goloso de gran cuerpo (15°).</div>
+                </div>
+              </div>
+
+              <div class="options-grid">
+                <div class="option-card selected" onclick="window.UI.selectOpt(this, 'harvestMethod', 'cajas_12kg_noche')">
+                  <div class="option-title">🌙 Vendimia Nocturna en Cajas de 12kg</div>
+                  <div class="option-desc">Cosecha manual a 5°C con linternas de minero para evitar oxidaciones.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'harvestMethod', 'seleccion_optica')">
+                  <div class="option-title">🔍 Mesa de Selección Óptica Láser</div>
+                  <div class="option-desc">Descarte automático por cámara de cualquier grano imperfecto.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'harvestMethod', 'prensado_directo_racimo')">
+                  <div class="option-title">🪣 Prensado Directo de Racimo Entero</div>
+                  <div class="option-desc">Entrada por gravedad directa a prensa sin despalillar para máxima pureza.</div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.nextStep()" style="width: 100%; margin-top: 18px;">
+                Siguiente: Vasijas & Fermentación ➔
+              </button>
+            </div>
+          `;
+        } else if (step === 3) {
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3>Misión 3: Vasijas de Fermentación & Levaduras</h3>
+                <span class="tag-label">PASO 3 DE 5</span>
+              </div>
+              <div class="options-grid" style="margin-bottom: 14px;">
+                <div class="option-card ${wine.idealVessel === 'cemento' || wine.idealVessel === 'hormigon' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'vessel', 'cemento')">
+                  <div class="option-title">🧱 Piletas de Hormigón Crudo</div>
+                  <div class="option-desc">Porosidad neutra sin epoxi que exalta la pureza mineral de la caliza.</div>
+                </div>
+                <div class="option-card ${wine.idealVessel === 'huevo' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'vessel', 'huevo')">
+                  <div class="option-title">🥚 Huevos de Cemento Poroso</div>
+                  <div class="option-desc">Movimiento vórtice continuo de lías que aporta textura sedosa y volumen.</div>
+                </div>
+                <div class="option-card ${wine.idealVessel === 'foudre' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'vessel', 'foudre')">
+                  <div class="option-title">🪵 Foudres Alsacianos Centenarios</div>
+                  <div class="option-desc">Roble viejo de 5.000 L que micro-oxigena sin notas maderosas excesivas.</div>
+                </div>
+              </div>
+
+              <div class="options-grid">
+                <div class="option-card selected" onclick="window.UI.selectOpt(this, 'yeast', 'indigenas')">
+                  <div class="option-title">🧫 Levaduras Indígenas Nativas</div>
+                  <div class="option-desc">Fermentación espontánea con la flora salvaje de la propia uva.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'yeast', 'seleccionadas')">
+                  <div class="option-title">🧪 Levaduras Seleccionadas</div>
+                  <div class="option-desc">Inoculación de cepas puras para fermentación 100% controlada.</div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.nextStep()" style="width: 100%; margin-top: 18px;">
+                Siguiente: Crianza & Embotellado ➔
+              </button>
+            </div>
+          `;
+        } else if (step === 4) {
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3>Misión 4: Crianza en Cava & Embotellado</h3>
+                <span class="tag-label">PASO 4 DE 5</span>
+              </div>
+              <div class="options-grid" style="margin-bottom: 14px;">
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'oakMonths', '8')">
+                  <div class="option-title">⏳ 8 Meses en Hormigón Puro</div>
+                  <div class="option-desc">Frescura directa, fruta viva crujiente y sin paso por madera.</div>
+                </div>
+                <div class="option-card selected" onclick="window.UI.selectOpt(this, 'oakMonths', '12')">
+                  <div class="option-title">⏳ 12 Meses en Barricas Usadas</div>
+                  <div class="option-desc">Roble francés sin tostar. Equilibrio perfecto y afinamiento tánico.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'oakMonths', '18')">
+                  <div class="option-title">⏳ 18 Meses de Gran Guarda</div>
+                  <div class="option-desc">Estructura profunda para vinos con horizonte de 20+ años en botella.</div>
+                </div>
+              </div>
+
+              <div class="options-grid">
+                <div class="option-card selected" onclick="window.UI.selectOpt(this, 'filtering', 'sin_filtrar')">
+                  <div class="option-title">🍷 Embotellado Sin Filtrar</div>
+                  <div class="option-desc">Mínima intervención. Conserva la textura de tiza y materia viva.</div>
+                </div>
+                <div class="option-card" onclick="window.UI.selectOpt(this, 'filtering', 'filtrado_suave')">
+                  <div class="option-title">✨ Filtrado Suave</div>
+                  <div class="option-desc">Brillo cristalino impecable para mercados comerciales exigentes.</div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.nextStep()" style="width: 100%; margin-top: 18px;">
+                Siguiente: Estudio de Diseño de Etiqueta ➔
+              </button>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3>Misión 5: Estudio de Diseño de Etiqueta & Botella</h3>
+                <span class="tag-label">PASO 5 DE 5</span>
+              </div>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+                Personaliza la estética de la botella. Tu nombre como enólogo se imprimirá de manera indeleble en la etiqueta original.
+              </p>
+
+              <div style="margin-bottom: 16px;">
+                <label class="tag-label" style="display: block; margin-bottom: 8px;">
+                  1. Tipo de Papel & Textura:
+                </label>
+                <div class="options-grid">
+                  <div class="option-card ${Engine.currentVintage.decisions.labelPaper === 'algodon' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelPaper', 'algodon'); window.UI.renderHub();">
+                    <div class="option-title">📜 Algodón Francés con Barbas</div>
+                    <div class="option-desc">Textura rugosa y barbas naturales de Grand Cru.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelPaper === 'negro_mate' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelPaper', 'negro_mate'); window.UI.renderHub();">
+                    <div class="option-title">🖤 Negro Mate Obsidian Touch</div>
+                    <div class="option-desc">Estética de culto minimalista aterciopelada.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelPaper === 'pergamino' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelPaper', 'pergamino'); window.UI.renderHub();">
+                    <div class="option-title">🏛️ Pergamino Tintoretto Caliza</div>
+                    <div class="option-desc">Tono marfil clásico con relieve en seco tradicional.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <label class="tag-label" style="display: block; margin-bottom: 8px;">
+                  2. Tipografía del Nombre del Vino:
+                </label>
+                <div class="options-grid">
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFont === 'playfair' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFont', 'playfair'); window.UI.renderHub();">
+                    <div class="option-title" style="font-family: var(--font-display);">💎 Playfair Haute Couture</div>
+                    <div class="option-desc">Serif dramático de alto contraste editorial.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFont === 'cormorant' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFont', 'cormorant'); window.UI.renderHub();">
+                    <div class="option-title" style="font-family: var(--font-serif);">🍷 Cormorant Grand Cru</div>
+                    <div class="option-desc">Serif clásico francés de gran distinción y nobleza.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFont === 'pinyon' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFont', 'pinyon'); window.UI.renderHub();">
+                    <div class="option-title" style="font-family: var(--font-script); font-size: 17px;">✍️ Caligrafía de Autor</div>
+                    <div class="option-desc">Trazo manuscrito personal de edición limitada.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFont === 'inter' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFont', 'inter'); window.UI.renderHub();">
+                    <div class="option-title">📐 Inter Minimalista</div>
+                    <div class="option-desc">Vanguardia geométrica y moderna sin serifas.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <label class="tag-label" style="display: block; margin-bottom: 8px;">
+                  3. Sellado del Cuello:
+                </label>
+                <div class="options-grid">
+                  <div class="option-card ${Engine.currentVintage.decisions.labelSeal === 'lacre_bordo' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelSeal', 'lacre_bordo'); window.UI.renderHub();">
+                    <div class="option-title">🕯️ Lacre Bordó Hecho a Mano</div>
+                    <div class="option-desc">Sellado artesanal en cera borgoña.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelSeal === 'capsula_estano' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelSeal', 'capsula_estano'); window.UI.renderHub();">
+                    <div class="option-title">🛡️ Cápsula de Estaño</div>
+                    <div class="option-desc">Cápsula metálica pesada clásica.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelSeal === 'cera_abeja' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelSeal', 'cera_abeja'); window.UI.renderHub();">
+                    <div class="option-title">🍯 Cera de Abeja Natural</div>
+                    <div class="option-desc">Cera virgen dorada de apicultura biodinámica.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label class="tag-label" style="display: block; margin-bottom: 8px;">
+                  4. Folia y Acentos Metalizados:
+                </label>
+                <div class="options-grid">
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFoil === 'oro' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFoil', 'oro'); window.UI.renderHub();">
+                    <div class="option-title">👑 Oro 24K Hot Stamping</div>
+                    <div class="option-desc">Folia de oro brillante estampada en caliente.</div>
+                  </div>
+                  <div class="option-card ${Engine.currentVintage.decisions.labelFoil === 'bordo' ? 'selected' : ''}" onclick="window.UI.selectOpt(this, 'labelFoil', 'bordo'); window.UI.renderHub();">
+                    <div class="option-title">🍷 Bordó Metalizado</div>
+                    <div class="option-desc">Brillo borgoña de alta sofisticación cromática.</div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.triggerHazardPhase()" style="width: 100%;">
+                Finalizar Botella & Supervisar Riesgos de Cava y Mercado ➔
+              </button>
+            </div>
+          `;
+        }
+      }
+
+      nextStep() {
+        Sound.playClick();
+        Engine.currentVintage.missionStep++;
+        this.renderHub();
+      }
+
+      selectOpt(el, cat, val) {
+        Sound.playClick();
+        if (el && el.parentElement) {
+          el.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+          el.classList.add('selected');
+        }
+        Engine.currentVintage.decisions[cat] = val;
+      }
+
+      triggerHazardPhase() {
+        Sound.playClick();
+        const hazard = Engine.triggerHazard();
+        const content = `
+          <div style="text-align: center; margin-bottom: 18px;">
+            <div style="font-size: 38px; margin-bottom: 6px;">${hazard.icon}</div>
+            <div class="tag-label" style="color: #f87171;">Incidente Crítico en Cava & Mercado</div>
+            <h2 style="font-size: 22px; color: #fca5a5; margin-top: 4px;">${hazard.title}</h2>
+          </div>
+
+          <p style="font-size: 13.5px; color: #e5e7eb; line-height: 1.55; margin-bottom: 20px; background: rgba(8, 8, 10, 0.85); padding: 14px 16px; border-radius: var(--radius-sm); border-left: 2px solid #ef4444;">
+            ${hazard.description}
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${hazard.options.map((opt, idx) => `
+              <button class="btn btn-outline" onclick="window.UI.resolveHazardChoice(${idx})" style="text-align: left; justify-content: space-between; padding: 14px 16px; font-size: 13px;">
+                <span>${opt.text}</span>
+                <span class="tag-label">${opt.riskLevel}</span>
+              </button>
+            `).join("")}
+          </div>
+        `;
+        this.showModal(content);
+      }
+
+      resolveHazardChoice(optIdx) {
+        Sound.playClick();
+        const res = Engine.resolveHazard(optIdx);
+        this.closeModal();
+
+        const content = `
+          <div style="text-align: center; padding: 12px;">
+            <div style="font-size: 36px; margin-bottom: 8px;">${res.isSuccess ? '✨' : '⚠️'}</div>
+            <h3 style="font-size: 22px; margin-bottom: 8px; color: ${res.isSuccess ? '#4ade80' : '#f87171'};">
+              ${res.isSuccess ? 'Resolución Enológica Exitosa' : 'Complicación en Cava / Mercado'}
+            </h3>
+            <p style="color: #e5e7eb; font-size: 13.5px; line-height: 1.55; margin-bottom: 20px;">
+              ${res.narrative}
+            </p>
+            <button class="btn btn-primary btn-lg" onclick="window.UI.finishTasting()" style="width: 100%;">
+              Presentar a los Críticos Oficiales ➔
+            </button>
+          </div>
+        `;
+        this.showModal(content);
+      }
+
+      finishTasting() {
+        this.closeModal();
+        Sound.playCorkPop();
+        const evaluated = Engine.evaluateWine();
+        this.renderTasting(evaluated);
+      }
+
+      renderTasting(wine) {
+        if (wine.score === 100) Sound.playFanfare();
+        const dec = wine.labelCustom;
+        const style = this.getLabelStyle(dec, wine.labelDesign);
+
+        this.root.innerHTML = `
+          <div class="stage-container">
+            <div class="bottle-frame">
+              <div class="bottle-neck">
+                ${dec.seal === 'lacre_bordo' ? `<div class="neck-seal-wax">LACRE</div>` : ''}
+                ${dec.seal === 'capsula_estano' ? `<div class="neck-seal-tin">ESTAÑO</div>` : ''}
+                ${dec.seal === 'cera_abeja' ? `<div class="neck-seal-beeswax">CERA</div>` : ''}
+              </div>
+              <div class="wine-label" style="background-color: ${style.bg}; color: ${style.txt}; border: 1.5px solid ${style.border};">
+                <div>
+                  <div style="font-size: 20px; margin-bottom: 2px;">${wine.labelDesign.imageBadge}</div>
+                  <div class="label-badge" style="background: ${style.border}; color: ${style.bg};">
+                    ${wine.labelDesign.sealText}
+                  </div>
+                  <div style="font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;">
+                    ${wine.bodegaName}
+                  </div>
+                </div>
+                <div>
+                  <div class="label-wine-name" style="font-family: ${style.fontFam}; font-size: ${dec.font === 'pinyon' ? '32px' : '20px'}; color: ${style.txt};">
+                    ${wine.name}
+                  </div>
+                  <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; color: ${style.border}; letter-spacing: 0.12em;">
+                    ${wine.grape}
+                  </div>
+                  <div class="label-signature" style="color: ${style.txt};">
+                    ENÓLOGO: ${wine.winemakerName}
+                  </div>
+                  <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-top: 2px;">
+                    ${wine.year}
+                  </div>
+                </div>
+                <div style="border-top: 1px solid rgba(0,0,0,0.12); padding-top: 6px; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;">
+                  ${dec.finish === 'suelo_calcareo' ? 'SUELO CALCÁREO • PARCELA ÚNICA' : (dec.finish === 'michelin' ? 'SELECCIÓN ESTRELLA MICHELIN' : (dec.finish === 'seleccion_enologo' ? 'GRAN SELECCIÓN DEL ENÓLOGO' : 'BOTELLA NUMERADA A MANO'))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="tag-label" style="margin-bottom: 4px;">
+                Añada ${wine.year} • Enólogo: ${wine.winemakerName}
+              </div>
+              <h2 style="font-size: 30px; margin-bottom: 12px;">
+                ${wine.name}
+              </h2>
+
+              <div style="background: #15151b; padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;">
+                  <span>Calificación Media Oficial:</span>
+                  <strong style="color: var(--gold-light); font-size: 20px; font-family: var(--font-mono);">${wine.score} pts</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                  <span>Precio de Mercado:</span>
+                  <strong style="color: #4ade80; font-family: var(--font-mono);">$${wine.price} USD / botella</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                  <span>Liquidación de Cosecha:</span>
+                  <strong style="color: #fff; font-family: var(--font-mono);">+$${wine.earnings.toLocaleString()} USD</strong>
+                </div>
+              </div>
+
+              ${wine.newTrophies.length > 0 ? `
+                <div style="background: var(--gold-subtle); border: 1px solid var(--gold-primary); padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+                  <div class="tag-label" style="color: var(--gold-light); margin-bottom: 4px;">
+                    🏆 DISTINCIONES INTERNACIONALES OBTENIDAS:
+                  </div>
+                  ${wine.newTrophies.map(t => `<div style="font-size: 12.5px; color: #fff; font-weight: 600;">⭐ ${t}</div>`).join("")}
+                </div>
+              ` : ''}
+
+              <button class="btn btn-primary btn-lg" onclick="window.UI.showCommercialStage()" style="width: 100%;">
+                Asignar Cupos a Vinotecas de Culto (Ventas) ➔
+              </button>
+            </div>
+          </div>
+
+          <h3 style="font-size: 19px; margin-bottom: 14px;">Dictámenes de la Crítica Internacional</h3>
+          <div class="reviews-grid">
+            ${wine.reviews.map(rev => `
+              <div class="review-card ${rev.score === 100 ? 'score-100' : ''}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <div style="display: flex; align-items: center; gap: 7px;">
+                    <span style="font-size: 16px;">${rev.avatar}</span>
+                    <strong style="font-size: 12.5px;">${rev.name}</strong>
+                  </div>
+                  <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--gold-light);">
+                    ${rev.score} pts
+                  </div>
+                </div>
+                <div style="font-size: 12.5px; color: #c8c8d2; font-style: italic; line-height: 1.45; font-family: var(--font-serif);">"${rev.note}"</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      showCommercialStage() {
+        Sound.playClick();
+        const content = `
+          <div style="margin-bottom: 18px;">
+            <div class="tag-label">MERCADO & ASIGNACIÓN DE CUPOS</div>
+            <h2 style="font-size: 24px; margin: 4px 0;">Distribución de la Partida</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Selecciona dónde colocar la partida del enólogo <strong>${Engine.player.name}</strong> para maximizar ventas y prestigio.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+            ${VINOTECAS_DB.map(v => `
+              <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 18px;">
+                <div>
+                  <div style="font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 2px;">${v.name}</div>
+                  <div class="tag-label" style="margin-bottom: 6px;">${v.location}</div>
+                  <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
+                    Curaduría: <em>${v.owner}</em>
+                  </div>
+                  <div style="font-size: 12px; color: #c8c8d2; font-style: italic; line-height: 1.4; margin-bottom: 12px; font-family: var(--font-serif);">
+                    "${v.quote}"
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="window.UI.confirmAllocation('${v.id}')">
+                  Asignar Cupo Exclusivo ➔
+                </button>
+              </div>
+            `).join("")}
+          </div>
+        `;
+        this.showModal(content);
+      }
+
+      confirmAllocation(vinotecaId) {
+        Sound.playCorkPop();
+        const res = Engine.applyCommercial(vinotecaId);
+        this.closeModal();
+
+        const content = `
+          <div style="text-align: center; padding: 14px;">
+            <div style="font-size: 34px; margin-bottom: 8px;">📜✨</div>
+            <h3 style="font-size: 22px; margin-bottom: 6px; color: var(--gold-light);">
+              Acuerdo Comercial Cerrado con ${res.vinoteca.name}
+            </h3>
+            <p style="font-size: 13.5px; color: #e5e7eb; margin-bottom: 20px; line-height: 1.5;">
+              La vinoteca adquirió la asignación de botellas firmadas por <strong>${Engine.player.name}</strong>. Ganaste <strong>+$${res.extraRevenue.toLocaleString()} USD</strong> y <strong>+${res.vinoteca.prestigeBoost} puntos de prestigio</strong>.
+            </p>
+            <button class="btn btn-primary btn-lg" onclick="window.UI.advanceNextYear()" style="width: 100%;">
+              Avanzar a la Siguiente Añada (${Engine.player.currentYear + 1}) ➔
+            </button>
+          </div>
+        `;
+        this.showModal(content);
+      }
+
+      advanceNextYear() {
+        this.closeModal();
+        const stepRes = Engine.advanceYear();
+
+        if (stepRes.status === "retired") {
+          this.renderRetirement();
+        } else if (stepRes.status === "offer") {
+          this.showRecruitment(stepRes.recruitedBodega);
+        } else {
+          this.renderHub();
+        }
+      }
+
+      showRecruitment(newBodega) {
+        Sound.playClick();
+        const content = `
+          <div style="text-align: center; padding: 10px;">
+            <div style="font-size: 36px; margin-bottom: 6px;">📜🍷</div>
+            <div class="tag-label" style="margin-bottom: 4px;">OFERTA DE FICHAJE DE ÉLITE</div>
+            <h2 style="font-size: 26px; margin: 4px 0;">${newBodega.name}</h2>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+              Dirección: ${newBodega.winemakerLeader}
+            </div>
+
+            <div style="background: #16161d; border-left: 2px solid var(--bordo-primary); padding: 14px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; text-align: left; font-size: 13.5px; color: #f3f4f6; line-height: 1.5; margin-bottom: 20px; font-family: var(--font-serif);">
+              "Estimado <strong>${Engine.player.name}</strong>, tus últimas añadas han cosechado elogios unánimes. En <strong>${newBodega.name}</strong> queremos que asumas la dirección técnica para liderar nuestras parcelas históricas."
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-primary btn-lg" onclick="window.UI.acceptOffer('${newBodega.id}')" style="flex: 1;">
+                Aceptar Fichaje por ${newBodega.shortName} ✍️
+              </button>
+              <button class="btn btn-outline btn-lg" onclick="window.UI.declineOffer()" style="flex: 1;">
+                Permanecer en ${Engine.currentBodega.shortName}
+              </button>
+            </div>
+          </div>
+        `;
+        this.showModal(content);
+      }
+
+      acceptOffer(newBodegaId) {
+        Sound.playCorkPop();
+        Engine.acceptRecruitment(newBodegaId);
+        this.closeModal();
+        this.renderHub();
+      }
+
+      declineOffer() {
+        Sound.playClick();
+        this.closeModal();
+        Engine.setupCurrentWine();
+        this.renderHub();
+      }
+
+      renderRetirement() {
+        Sound.playFanfare();
+        const p = Engine.player;
+        const totalWines = p.winesHistory.length;
+        let sumScore = 0;
+        let bestWine = null;
+
+        p.winesHistory.forEach(w => {
+          sumScore += w.score;
+          if (!bestWine || w.score > bestWine.score) bestWine = w;
+        });
+
+        let legacyTitle = "Enólogo Consagrado de los Andes";
+        if (p.trophies.parker100 >= 3 || p.reputation >= 90) {
+          legacyTitle = "LEYENDA INMORTAL DEL VINO MUNDIAL";
+        } else if (p.trophies.parker100 >= 1 || p.trophies.timAtkinWinemaker >= 1) {
+          legacyTitle = "MAESTRO CONSAGRADO DE LOS ANDES";
+        } else if (p.reputation >= 70) {
+          legacyTitle = "DIRECTOR ENOLÓGICO DE CULTO INTERNACIONAL";
+        }
+
+        this.root.innerHTML = `
+          <div class="card" style="max-width: 760px; margin: 30px auto; padding: 36px; text-align: center;">
+            <div style="font-size: 44px; margin-bottom: 6px;">👑🏆</div>
+            <div class="tag-label" style="margin-bottom: 6px;">
+              SALÓN DE LA FAMA & CEREMONIA DE RETIRO • EL VINERO
+            </div>
+            <h1 class="brand-title" style="font-size: 42px; margin: 4px 0 8px 0;">
+              ${p.name}
+            </h1>
+            <div style="font-size: 16px; font-weight: 600; color: var(--gold-light); margin-bottom: 24px;">
+              ${legacyTitle}
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;">
+              <div style="background: #16161d; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: #fff;">${totalWines}</div>
+                <div class="tag-label" style="color: var(--text-muted); font-size: 9px;">Añadas</div>
+              </div>
+              <div style="background: #16161d; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--gold-light);">${p.trophies.parker100}</div>
+                <div class="tag-label" style="color: var(--text-muted); font-size: 9px;">100 Pts Parker</div>
+              </div>
+              <div style="background: #16161d; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--gold-light);">${p.trophies.timAtkinWinemaker}</div>
+                <div class="tag-label" style="color: var(--text-muted); font-size: 9px;">Enólogo del Año</div>
+              </div>
+              <div style="background: #16161d; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: #4ade80;">$${p.wealth.toLocaleString()}</div>
+                <div class="tag-label" style="color: var(--text-muted); font-size: 9px;">Patrimonio USD</div>
+              </div>
+            </div>
+
+            <div style="text-align: left; margin-bottom: 22px;">
+              <h3 class="tag-label" style="margin-bottom: 10px; font-size: 11px;">
+                Bodegas donde ${p.name} dejó su huella:
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${p.bodegaHistory.map(h => `
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #16161d; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);">
+                    <div>
+                      <strong style="color: #fff; font-size: 13.5px;">${h.name}</strong>
+                      <div style="font-size: 11.5px; color: var(--text-muted);">${h.role}</div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--gold-light); font-weight: 600; font-family: var(--font-mono);">
+                      ${h.startYear} - ${h.endYear || p.currentYear}
+                    </div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            ${bestWine ? `
+              <div style="background: var(--gold-subtle); border: 1px solid var(--gold-primary); padding: 16px; border-radius: var(--radius-sm); text-align: left; margin-bottom: 24px;">
+                <div class="tag-label" style="color: var(--gold-light);">Obra Maestra de tu Vida:</div>
+                <div style="font-size: 18px; font-weight: 600; color: #fff; font-family: var(--font-display); margin-top: 2px;">${bestWine.name} (${bestWine.year})</div>
+                <div style="font-size: 12px; color: var(--text-muted);">${bestWine.bodegaName} | Puntaje Histórico: ${bestWine.score} pts</div>
+              </div>
+            ` : ''}
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button class="btn btn-primary btn-lg" onclick="window.UI.copySummary()">
+                📋 Copiar Resumen de Carrera
+              </button>
+              <button class="btn btn-outline btn-lg" onclick="window.UI.renderStart()">
+                🔄 Nueva Carrera en El Vinero
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      copySummary() {
+        Sound.playClick();
+        const p = Engine.player;
+        const totalWines = p.winesHistory.length;
+        const text = `🍷 El Vinero: Carrera de Vida Vitivinícola\n👤 Enólogo: ${p.name}\n🏆 Añadas Elaboradas: ${totalWines} (${p.startYear} - ${p.currentYear})\n💯 100 Puntos Parker: ${p.trophies.parker100}\n👑 Tim Atkin MW Winemaker of the Year: ${p.trophies.timAtkinWinemaker}\n💰 Patrimonio Final: $${p.wealth.toLocaleString()} USD\n🎖️ Prestigio: ${p.reputation}/100\n¡Consagrado como leyenda del vino!`;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => alert("¡Resumen de carrera copiado al portapapeles!"));
+        } else {
+          alert(text);
+        }
+      }
+
+      showModal(innerHtml) {
+        const bd = document.getElementById("global-modal");
+        const cnt = document.getElementById("modal-content");
+        if (bd && cnt) {
+          cnt.innerHTML = innerHtml;
+          bd.classList.add("active");
+        }
+      }
+
+      closeModal() {
+        Sound.playClick();
+        const bd = document.getElementById("global-modal");
+        if (bd) bd.classList.remove("active");
+      }
+    }
+
+    const UI = new UIController();
+    window.UI = UI;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.renderStart();
+    });
+  </script>
+</body>
+</html>
